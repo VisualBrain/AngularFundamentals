@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="eventsApp">
+<!-- eventApp is the module running this page-->
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Event Registeration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="css/app.css" />
+</head>
+
+<body ng-cloak>
+    <div class="container">
+        <div class="navbar">
+            <div class="navbar-inner">
+                <ul class="nav">
+                    <li class="nav-item"><a class="nav-link" ng-href="/NewEvent.html">Create New Event</a></li>
+                </ul>
+            </div>
+        </div>
+        <div ng-controller="EventController" style="padding-left: 20px;padding-right: 20px">
+            <img ng-src="{{event.imageUrl}}" alt="{{event.name}}" />
+            <div class="row">
+                <div class="span11">
+                    <h2>{{event.name |uppercase}}</h2>
+                    <!-- Using Filter - Lowecase ,Uppercase ,Number,currency-->
+                    <!--   <h2 ng-class="myClass" ng-bind="event.name"></h2>
+                    <h2 ng-style="ngStyleC" ng-bind-template="{{event.name}} {{event.date}}"></h2>-->
+                </div>
+            </div>
+            <hr/>
+            <button class="btn" ng-disabled="disableMe">Button Disable</button>
+            <div ng-non-bindable="true">{{1+4}} Tell angular not to parse this block ng-non-bindable</div>
+            <div ng-bind-html-unsafe="snippet" class="ng-binding">sOME TITLE</div>
+            <div ng-bind-html="snippet"></div>
+            <h3 ng-show="boolVal">Show this</h3>
+            <h3 ng-hide="boolVal">hide Me</h3>
+            <hr/>
+            <div class="row">
+                <div class="col-4">
+                    <div>
+                        <strong>Date:</strong>{{event.date |date}}</div>
+                    <div>
+                        <strong>Time:</strong>{{event.time}}</div>
+                </div>
+                <div class="col-4">
+                    <div>
+                        <strong>Address</strong>
+                        <br />
+                        <address>
+                            {{event.location.city}},{{event.location.country}},{{event.location.pincode}}
+                            <br/>{{event.location.latitude}},{{event.location.longitude}}
+                        </address>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <div> {{3.1133445 |currency}}
+                <!--Currency Filter-->
+            </div>
+            <div> {{3.1133445 |number:4}}
+                <!--Number Filter-->
+            </div>
+            <div> {{9499494994 |date:'medium'}}
+                <!--Date Filter-->
+            </div>
+            <div> {{ {a:4,b:'Json Filter',c:'Date Filter'} | json}}</div>
+            <hr/>
+            <h4>Sessions</h4>
+            OrderBy:
+            <select ng-model="sortorder" class="input-small">
+                <option selected value="name">Name</option>
+                <option value="type">Type</option>
+                <option value="-upVoteCount">Voting Counts</option>
+            </select>
+            <!-- <select ng-model="query" class="input-small">
+                <option selected value="">All</option>
+                <option selected value="Low">Low</option>
+                <option selected value="Medium">Medium</option>
+                <option selected value="High">High</option>
+            </select> -->
+            <!-- To Specify that Which query we want to perform action on -->
+            <select ng-model="query.levelOfSecurity" class="input-small">
+                    <option selected value="">All</option>
+                    <option selected value="Low">Low</option>
+                    <option selected value="Medium">Medium</option>
+                    <option selected value="High">High</option>
+                </select>
+            <ul class="thumbnails">
+                <li ng-repeat="session in event.sessions | orderBy:sortorder|limitTo:3 |filter:query">
+                    <div class="row session">
+                        <div class="span0 well votingWidget">
+                            <div class="votingButton" ng-click="upVoteSession(session)">
+                                <i class="icon-chevron-up icon-white"></i>
+                            </div>
+                            <div class="badge badge-inverse">
+                                <div>{{session.upVoteCount}}</div>
+                            </div>
+                            <div class="votingButton" ng-click="downVoteSession(session)">
+                                <i class="icon-chevron-down icon-white"></i>
+                            </div>
+                        </div>
+                        <div class="well span9">
+                            <h4 class="well-title">
+                                {{session.name}}
+                            </h4>
+                            <h5 style="margin-top: 10px">{{session.type}}</h5>
+                            <span>Duration: {{session.duration}}</span>
+                            <br />
+                            <span>Level: {{session.level | level}}</span>
+                            <br />
+                            <span>Security Level : {{session.levelOfSecurity}}</span>
+                            <br />
+                            <span> Abstract : {{session.abstract}}</span>
+                        </div>
+                    </div>
+                    <br />
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script src="lib/jquery.min.js"></script>
+    <script src="lib/underscore-1.4.4.min.js"></script>
+    <script src="lib/bootstrap.min.js"></script>
+    <script src="lib/angular/angular.js"></script>
+    <script src="lib/angular/angular-sanitize.js" title="Needed for ng-bind-html to work"></script>
+    <script src="js/app.js"></script>
+    <script src="js/services/EventData.js"></script>
+    <script src="js/controllers/EventController.js"></script>
+    <script src="js/filters.js"></script>
+</body>
+
+</html>
